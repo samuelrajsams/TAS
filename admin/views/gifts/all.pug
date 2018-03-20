@@ -1,0 +1,20 @@
+div(layout="column", ng-init="init()")
+  div(layout="row", layout-align="space-around")
+    div
+      md-input-container
+        label Title
+        input(ng-model="searchTitle", ng-change="searchGifts()")
+    div
+      md-input-container
+        label Tag
+        md-select(ng-model="searchTag")
+          md-option(ng-repeat="tag in tags",  ng-value="tag.value") {{tag.name}}
+  div
+    md-list(ng-repeat="gift in allGifts")
+      div(layout="row", layout-align="center center")
+        md-list-item(layout-fill, layout-align="center center")
+          div(flex=50) 
+            h3 {{gift.title}}
+          div
+            md-button.md-raised(href="#gifts/edit/{{gift._id}}") EDIT
+        div.md-divider

@@ -1,0 +1,21 @@
+#!/usr/bin/env node
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
+/*
+ * decaffeinate suggestions:
+ * DS101: Remove unnecessary use of Array.from
+ * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
+ */
+const [interpreter,script,name] = Array.from(process.argv);
+const bodyParser = require("body-parser");
+const CSON = require("cson-parser");
+const fs = require("fs");
+const path = require("path");
+const {read} = require("fairmont");
+const AdminServer = require("../src/admin-server");
+
+const configPath = path.resolve(__dirname,"..", "..", "commons", "env",name,"config.cson");
+
+const configuration = CSON.parse(read(configPath));
+configuration.dbConfig = CSON.parse(read(path.resolve(__dirname,"..", "..", "commons", "env", "common", "database-mapping.cson")));
+AdminServer.run(configuration);

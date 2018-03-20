@@ -1,0 +1,55 @@
+div(layout="column", ng-init="getAllActivities()")
+  div(layout="column" ng-if="showForm")
+    form(name='editCampaignForm')
+      div(layout="row", layout-align="space-around")
+        div
+          md-input-container
+            label Name* 
+            input(ng-model="editCamp.name", type="string",required="")
+        div
+          md-input-container
+            label Budget*
+            input(ng-model="editCamp.budget", type="number",required="")
+      div(layout="row", layout-align="space-around")
+        div
+          md-input-container
+            label Select Level
+            md-select(ng-model="camp.level_id", ng-change="")
+              md-option(ng-repeat="level in campLevels",  ng-value="level.id") {{level.name}}
+        div
+          md-input-container
+            label Select Task Category
+            md-select(ng-model="camp.taskCat")
+              md-option(ng-repeat="task in taskCategories",  ng-value="task.id") {{task.name}}
+        md-input-container
+          label Target
+          input(ng-model="tags", type="number")
+      div(layout="row", layout-align="space-around")
+        md-input-container
+          label Current Reach
+          input(ng-model="camp.reach", type="number")
+        md-input-container
+          label Priority
+          input(ng-model="camp.priority", type="number")
+        md-datepicker(ng-model='camp.expDate', md-placeholder='Enter Expire Date', md-open-on-focus='')
+      div(layout="row")
+        div(flex)
+          textarea(layout-fill, placeholder="Description", ng-model="camp.description", style="height: 5rem")
+
+      div(layout="row", layout-align="space-around")
+        div
+          md-button.md-raised.md-primary(ng-disabled='editCampaignForm.$invalid' ng-click="updateUser()") Save
+        div
+          md-button.md-raised.md-warn(ng-disabled='!(editCampaignForm.$dirty)', ng-click="cancleEdit()") Cancel
+
+  div(layout="row", layout-align="space-around")
+    md-list(flex='')
+      md-subheader.md-no-sticky Campaign List
+      md-list-item.md-3-line(ng-repeat='camp in campaignList',  ng-click="openEdit(camp)")
+        md-tooltip(md-direction='left') Click to Edit Campaign Details
+        img.md-avatar(ng-src='http://www.iconhot.com/icon/png/bunch-cool-bluish-icons/512/edit-29.png', alt='{{camp.name}}')
+        .md-list-item-text(layout='column')
+          h3 {{ camp.name }}
+          h4 Exp Date - {{ camp.expDate |date :  "dd.MMM.yyyy" }}
+          p  Priority - {{ camp.priority }}
+

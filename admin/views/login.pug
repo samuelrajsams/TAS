@@ -1,0 +1,27 @@
+head
+  link(rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css")
+  //- Angular Material requires Angular.js Libraries
+  script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js")
+  script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js")
+  script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js")
+  script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js")
+
+  //- Angular Material Library
+  script(src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js")
+body(ng-App="LoginApp", layout="column", ng-controller="loginController")
+  md-card(layout="column", layout-align="center center")
+    h1 Admin Login
+  div(layout="row", layout-align="center center")
+    div
+      md-input-container
+        label Username
+        input(ng-model="username", type="email")
+    div
+      md-input-container
+        label Password
+        input(ng-model="password", type="password")
+  div(layout="row", layout-align="center center")
+    md-button.md-raised(ng-click="login()") Login
+  script.
+    app = angular.module('LoginApp', ['ngMaterial'])
+  script(src="/js/controllers/login-controller.js")

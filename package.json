@@ -1,0 +1,40 @@
+{
+	"name": "tas",
+	"version": "0.1.0",
+	"description": "Task Allocation System",
+	"dependencies": {
+		"aws-sdk": "2.7.19",
+		"body-parser": "1.9.2",
+		"busboy": "0.2.13",
+		"coffee-script": "1.12.2",
+		"cson-parser": "1.1.1",
+		"csv-parser": "1.11.0",
+		"csvtojson": "1.1.9",
+		"cookie-parser": "~1.4.3",
+		"elasticsearch": "14.0.0",
+		"express": "4.13.4",
+		"express-coffee-script": "0.2.0",
+		"express-session": "~1.14.1",
+		"fairmont": "~0.8.2",
+		"fb": "2.0.0",
+		"key-forge": "1.0.0-beta-01",
+		"log4js": "~0.6.16",
+		"mime-types": "2.1.13",
+		"method-override": "~2.3.6",
+		"nodemailer": "2.7.0",
+		"passport": "~0.3.2",
+		"passport-facebook": "~1.0.2",
+		"passport-twitter": "~1.0.4",
+		"passport-google-oauth": "~0.1.5",
+		"pug": "2.0.0-beta6",
+		"redis": "2.5.0",
+		"request": "2.79.0",
+		"shortid": "2.2.6",
+		"urlencode": "1.1.0"
+	},
+	"scripts": {
+		"start": "admin/bin/admin-server development"
+	},
+	"license": "NA",
+	"private": true
+}

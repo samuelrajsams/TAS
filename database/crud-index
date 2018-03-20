@@ -1,0 +1,70 @@
+#!/usr/bin/env node
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
+/*
+ * decaffeinate suggestions:
+ * DS101: Remove unnecessary use of Array.from
+ * DS102: Remove unnecessary code created because of implicit returns
+ * DS207: Consider shorter variations of null checks
+ * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
+ */
+
+const [interpreter,script,env,entity] = Array.from(process.argv);
+const CSON = require("cson-parser");
+const path = require("path");
+const fs = require("fs");
+const elasticsearch = require("elasticsearch");
+let indexPath = path.resolve(__dirname,"mapping",`${entity}-index-config.cson`);
+const dbConfigPath = path.resolve(__dirname,"..","commons","env", "common","database-mapping.cson");
+const configPath = path.resolve(__dirname,"..","commons","env", env,"config.cson");
+const mappingDir = path.resolve(__dirname,"mapping");
+
+const {host, port} = CSON.parse(fs.readFileSync(configPath).toString()).elasticsearch;
+console.log("chosy");
+console.log(host, port);
+const dbConfig = CSON.parse(fs.readFileSync(dbConfigPath).toString());
+
+const client = new (elasticsearch.Client)({
+  host: `${host}:${port}`
+  });
+
+const crudIndex = function(entity) {
+  console.log("indexPath");
+  indexPath = path.resolve(__dirname,"mapping",`${entity}-index-config.cson`);
+  console.log(indexPath);
+  const indexConfig = CSON.parse(fs.readFileSync(indexPath).toString());
+  const { dbPrefix } = dbConfig;
+  indexConfig.index = `${dbPrefix}_${indexConfig.index}`;
+  indexConfig.alias = `${dbPrefix}_${indexConfig.alias}`;
+  let params =
+    {index: indexConfig.index};
+
+  return client.indices.exists(params)
+  .then(function(indexExists) {
+    if (indexExists === false) {
+      return client.indices.create(params);
+    } else {
+      return null;
+    }}).then(function(data) {
+    params.type = indexConfig.type;
+    params.body = indexConfig.mapping; 
+    return client.indices.putMapping(params);}).then(function(data) {
+    const actions = [{add:{index: indexConfig.index, alias: indexConfig.alias}}];
+    params = {body: {actions}};
+    return client.indices.updateAliases(params);}).then(function(response) {
+    console.log("Alias name updated", response);
+    }).catch(error => console.log(error));
+};
+
+// to check entity exist in folder or not
+
+const entites = fs.readdirSync(mappingDir).map(x => x.replace("-index-config.cson", ""));
+if ((entity != null) && (entites.indexOf(`${entity}`) >= 0)) {
+} else if (entity === undefined) {
+  entites.forEach(function(x) {
+    console.log("Initialising entity: ", x);
+    return crudIndex(x);
+  });
+} else {  
+  console.log(`No such entity exists Pls chk ${entity}`);
+}

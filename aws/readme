@@ -1,0 +1,66 @@
+
+---> To run MU Instance<---
+chmod 400 aws/pas.pem
+---> login
+ssh -i aws/pas.pem ubuntu@35.154.91.149
+
+-->or<--
+ssh -i aws/pas.pem ubuntu@ad-pas.com
+
+--> Steup
+-> Load
+sudo apt-get update
+sudo apt-get install nodejs
+sudo apt-get install npm
+
+sudo npm install n
+sudo npm install -g n
+sudo n stable
+sudo n 6.11.1
+sudo npm install -g harp
+sudo apt-get install tmux
+
+tmux new -s padas_web-----> to open new tmux session name (padas_web)
+
+------> After setup
+tmux a -t padas_web --> to attach  with session 
+
+---> Install ES<---
+ use directions from below using latest version
+ https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-elasticsearch-on-ubuntu-14-04
+
+----> Install redis
+https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-redis-on-ubuntu-16-04
+
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-redis
+
+
+------> Install Letsencrypt(certbot) and haproxy--------------
+
+a)--- https://github.com/certbot/certbot.git( use this as in digtal ocen old git is given)
+1) ref: https://www.digitalocean.com/community/tutorials/how-to-secure-haproxy-with-let-s-encrypt-on-ubuntu-14-04
+
+https://certbot.eff.org/all-instructions/#ubuntu-16-10-yakkety-haproxy
+
+2) https://certbot.eff.org/#ubuntutrusty-haproxy
+
+
+-----> Install ha proxy
+1). sudo apt-get install haproxy
+-- Before making changes to the default file you should make a backup of the original with
+2). sudo cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.original
+30. sudo nano /etc/haproxy/haproxy.cfg
+
+
+------>For Certificate renewal<------
+1) sudo service haproxy stop
+2) cd certbot/
+3) sudo ./letsencrypt-auto certonly --standalone
+    after this enter website name and its versions for localtrains.info: localtrains.info
+    for memoriesunlimited.co.in: memoriesunlimited.co.in
+4) for ad-pas.com - cert pem name in haproxy is ad-pas.com.pem so below command when cert is generated
+  
+  sudo -E bash -c 'cat /etc/letsencrypt/live/ad-pas.com/fullchain.pem /etc/letsencrypt/live/ad-pas.com/privkey.pem > /etc/haproxy/certs/ad-pas.com.pem'
+
+4(a)) for memoriesunlimited.co.in: 
+  sudo -E bash -c 'cat /etc/letsencrypt/live/memoriesunlimited.co.in/fullchain.pem /etc/letsencrypt/live/memoriesunlimited.co.in/privkey.pem > /etc/haproxy/certs/mu.pem'  

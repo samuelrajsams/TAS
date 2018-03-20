@@ -1,0 +1,55 @@
+div(layout="column", layout-padding, ng-init="init()")
+  div
+    div(layout="row", layout-align="space-around")
+      div
+        md-input-container
+          label Title 
+          input(ng-model="title", type="string")
+      div
+        md-input-container
+          label Price 
+          input(ng-model="price", type="string")
+      div
+        md-input-container
+          label Display Name
+          input(ng-model="display_name", type="string")
+    div(layout="row")
+      div(flex)
+        textarea(layout-fill, placeholder="Description", ng-model="description", style="height: 5rem")
+    div(layout="row", layout-align="space-around", layout-padding)
+      //- div
+      //-   md-input-container
+      //-     label Image Url 
+      //-     input(ng-model="image_url", type="string")
+      div
+        md-button.md-raised(ng-click="saveAddon()") Add Addon
+  div
+    md-list
+      div.md-margin(ng-repeat="addon in addons")
+        div(layout="row", layout-align="space-around")
+          div
+            md-input-container
+              label Title 
+              input(ng-model="addon.title", type="string")
+          div
+            md-input-container
+              label Price 
+              input(ng-model="addon.price", type="string")
+          div
+            md-input-container
+              label Display Name
+              input(ng-model="addon.display_name", type="string")
+        div(layout="row", layout-align="space-around") 
+          div
+            img(src="{{config.imageBaseUrl}}/{{addon.image_url}}", height="100px", width="200px")
+          div
+            md-button.md-raised(ng-click="updateAddon($index)") Save Addon
+        div(layout="row", layout-align="space-around")
+          div(layout="row", layout-align="space-around")
+            div
+              input#inputFile(type="file", style="display: none;")
+              md-button.md-raised(onclick="document.getElementById('inputFile').click();") Select File
+            div
+              md-button.md-raised(ng-click="uploadImage(addon)") Upload Image
+        md-divider
+  

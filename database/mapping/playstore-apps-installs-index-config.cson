@@ -1,0 +1,20 @@
+index: "playstore_apps_installs_v1"
+type: "app_install"
+alias: "playstore_apps_installs"
+mapping:
+  properties:
+    user_id: type: "string", index: "not_analyzed"
+    apps: 
+      type: "object"
+      properties:
+        package_name: type: "string", index: "not_analyzed"
+        application_name: type: "string", index: "not_analyzed"
+        version: type: "string", index: "not_analyzed"
+        version_code: type: "string", index: "not_analyzed"
+        app_install_date: type: "date"
+        app_update_date: type: "date"
+        min_sdk_version: type: "string", index: "not_analyzed"
+        target_sdk_version: type: "string", index: "not_analyzed"
+    status: type: "integer"
+    create_time: type: "date"
+    update_time: type: "date"

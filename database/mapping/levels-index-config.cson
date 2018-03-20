@@ -1,0 +1,20 @@
+index: "levels_v1"
+type: "level"
+alias: "levels"
+mapping:
+  properties:
+    level_id: type: "string", index: "not_analyzed"
+    package_id: type: "string", index: "not_analyzed"
+    description: type: "string", index: "not_analyzed"
+    next_level_id: type: "string", index: "not_analyzed"
+    next_level_eligibility_criteria:
+      type: "object"
+      properties:
+        min_credits: type: "double"
+        task_types:
+          type: "object"
+          properties:
+            type_id: type: "string", index: "not_analyzed"
+            count: type: "integer"
+    create_time: type: "date"
+    update_time: type: "date"

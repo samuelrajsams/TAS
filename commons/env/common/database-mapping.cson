@@ -1,0 +1,61 @@
+dbPrefix: "pas"
+auth:
+  KEY_SIZE: 32
+  ITERATIONS: 10000
+  SALT_KEY_SIZE: 16
+backendUsers:
+  usePrefix: true
+  index: "backend_users"
+  type: "user"
+  timeout: 3600
+userCredits:
+  usePrefix: true
+  index: "user_credits"
+  type: "credits"
+  timeout: 3600
+campaigns:
+  usePrefix: true
+  index: "campaigns"
+  type: "campaign"
+  timeout: 86400
+campaignCredits:
+  usePrefix: true
+  index: "campaign_credits"
+  type: "credits"
+  timeout: 86400
+levels:
+  usePrefix: true
+  index: "levels"
+  type: "level"
+  timeout: 86400
+taskTypes:
+  usePrefix: true
+  index: "task_types"
+  type: "type"
+  timeout: 86400
+tasksCategory:
+  usePrefix: true
+  index: "tasks_category"
+  type: "category"
+  timeout: 3600
+usersTasks:
+  usePrefix: true
+  index: "users_tasks"
+  type: "task"
+  timeout: 3600
+packages:
+  usePrefix: true
+  index: "packages"
+  type: "package"
+  timeout: 3600
+facebookPagesLikes:
+  usePrefix: true
+  index: "facebook_pages_likes"
+  type: "page_like"
+  timeout: 3600
+playstoreAppsInstalls:
+  usePrefix: true
+  index: "playstore_apps_installs"
+  type: "app_install"
+  timeout: 3600
+

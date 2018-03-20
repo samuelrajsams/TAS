@@ -1,0 +1,9 @@
+index: "user_credits_v1"
+type: "credits"
+alias: "user_credits"
+mapping:
+  properties:
+    id: type: "string", index: "not_analyzed"
+    userID: type: "string", index: "not_analyzed"
+    no_of_credits_finished: type: "string", index: "not_analyzed"
+    remaining_credits: type: "string", index: "not_analyzed"

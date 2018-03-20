@@ -1,0 +1,62 @@
+div(layout="column", layout-padding, ng-init="init()")
+  div(layout="row", layout-align="space-around")
+    div
+      md-input-container
+        label Title 
+        input(ng-model="title", type="string")
+    div
+      md-input-container
+        label Display Title
+        input(ng-model="display_title", type= "string")
+    div
+      md-input-container
+        label Price
+        input(ng-model="price", type="string")
+    
+  div(layout="row")
+    div(flex)
+      textarea(layout-fill, placeholder="Description", ng-model="description", style="height: 5rem")
+  div(layout="row")
+    div
+      md-input-container
+        label Categories
+        md-select(ng-model="selectedCategory")
+          md-option(ng-repeat="category in categories",  ng-value="category") {{category.name}}
+    div
+      md-input-container
+        label Tags
+        input(ng-model="tags", type="string")
+  div(layout="row")
+    div
+      md-input-container
+        label Seo Key Words
+        input(ng-model="seo_keywords", type="string")
+
+  div(layout="row", layout-align="space-around")
+    div
+      md-button.md-raised(ng-click="saveGift()") save gift
+  div 
+    label Upload Images
+  div(layout="row", layout-align="space-around")
+    div(layout="row", layout-align="space-around")
+      div
+        input#inputFile(type="file", style="display: none;")
+        md-button.md-raised(onclick="document.getElementById('inputFile').click();") Select File
+      div
+        md-button.md-raised(ng-click="uploadImage()") Upload Image
+      div
+        md-button.md-raised(ng-click="changeDefault()") Change Default
+    div(layout="row", layout-padding)
+      md-progress-linear(md-mode="determinate", ng-value="data.uploadPercentage")
+  div 
+    label Images {{imageUrls.length}}
+  md-radio-group(ng-model="defaultImageIndex")
+    div(style="text-align: center;")
+      img(src="{{config.imageBaseUrl}}/{{mainUrl}}", width="500")
+    div(layout="row", layout-align="space-around")
+      div(ng-repeat="imageUrl in imageUrls")
+        img(src="{{config.imageBaseUrl}}/{{imageUrl}}", height="200px", width="200px")
+        div(layout="row", layout-align="center center", md-)
+            md-radio-button(value="{{$index}}") default
+            md-button(ng-click="removeImageUrl($index)")
+              md-icon delete

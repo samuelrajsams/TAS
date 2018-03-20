@@ -1,0 +1,92 @@
+#!/usr/bin/env node
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
+/*
+ * decaffeinate suggestions:
+ * DS101: Remove unnecessary use of Array.from
+ * DS102: Remove unnecessary code created because of implicit returns
+ * DS207: Consider shorter variations of null checks
+ * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
+ */
+let [interpreter,script, env] = Array.from(process.argv);
+
+const {randomKey} = require("key-forge");
+const elasticsearch = require("elasticsearch");
+const crypto = require("crypto");
+const CSON = require("cson-parser");
+const path = require("path");
+const fs = require("fs");
+
+const email = "su@tas.com";
+const password = "smac";
+
+
+if ((env == null)) { console.log("Environment not defined setting it to development"); }
+if ((env == null)) { env = "development"; }
+
+const dbConfigPath = path.resolve(__dirname,"..","commons","env", "common","database-mapping.cson");
+const configPath = path.resolve(__dirname,"..","commons","env", env,"config.cson");
+const mappingDir = path.resolve(__dirname,"mapping");
+
+const {host, port} = CSON.parse(fs.readFileSync(configPath).toString()).elasticsearch;
+const dbConfig = CSON.parse(fs.readFileSync(dbConfigPath).toString());
+
+const esClient = new (elasticsearch.Client)({
+  host: `${host}:${port}`
+  });
+//OPT - get it from config --kiran
+const backedUsersIndex = "pas_backend_users";
+const backednUserType = "user";
+
+const getAdmin = function() {
+  const params = {index: backedUsersIndex, type: backednUserType};
+  params.body = {query: {term: {role: "admin"}}};
+  return esClient.search(params)
+  .then(function(data) {
+    if (data.hits.hits.length > 0) {
+      const hit = data.hits.hits[0];
+      hit._source._id = hit._id;
+      return hit._source;
+    } else {
+      return null;
+    }
+  });
+};
+
+const createSystemAdmin = function() {
+  const params = {index: backedUsersIndex, type: backednUserType};
+  const salt = randomKey(9);
+  const hashPassword = crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex');
+  const time = new Date().toISOString();
+  params.body = {
+    email,
+    salt,
+    password: hashPassword,
+    role: "admin",
+    create_time: time,
+    update_time: time
+  };
+  return esClient.index(params);
+};
+
+const updatePassword = function(admin) {
+  const params = {index: backedUsersIndex, type: backednUserType, id: admin._id};
+  delete admin._id;
+  const hashPassword = crypto.pbkdf2Sync(password, admin.salt, 100000, 64, 'sha512').toString('hex');
+  params.body = {doc : {hashPassword}};
+  return esClient.update(params);
+};
+
+const run = () =>
+  getAdmin()
+  .then(function(admin) {
+    if (admin != null) {
+      return updatePassword(admin);
+    } else {
+      return createSystemAdmin();
+    }}).then(function() {
+    console.log("system admin intialised");
+    return esClient.close();}).catch(error => console.log("Error occurred in initilase: ", error))
+;
+
+run();

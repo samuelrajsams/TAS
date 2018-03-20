@@ -1,0 +1,12 @@
+admin:
+  host: "0.0.0.0"
+  port: 9901
+web:
+  host: "127.0.0.1"
+  port: 9910
+elasticsearch:
+  host: "https://search-staging-pas-kqyohn4rjho36lnh222y3wl6ka.ap-south-1.es.amazonaws.com"
+  port: 443
+redis:
+  host: "127.0.0.1"
+  port: 6379

@@ -1,0 +1,5 @@
+admin:
+  routes:{"all": true}
+publisher:
+  routes:
+    tasks: ["/tasks/create", "tasks/update"]

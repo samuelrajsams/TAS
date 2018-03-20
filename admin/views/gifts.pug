@@ -1,0 +1,24 @@
+div(layout="column", layout-padding)
+  div(layout="row", layout-align="center")
+    md-input-container
+      label Post Url or Post Id 
+      input(type="string", ng-model="postUrl")
+  div(layout="row", layout-align="space-around")
+    md-button.md-raised(ng-click="getProfile()") Get Profile
+    md-button.md-raised(ng-click="getPost()") Get Post
+    md-button.md-raised(ng-click="deletePost()") Delete Post
+    md-button.md-raised(ng-click="getTree()") Get Tree
+  div#profileData(ng-if="show==0")
+    p Profile Data 
+    textarea(layout-fill, style="height: 20rem"){{profileData}}
+  md-divider
+  div#videos(ng-if="show==1")
+    p Video Data
+      p
+        a.pageUrl(href="{{JSON.parse(videoData).pageUrl}}") {{JSON.parse(videoData).videoID}}
+        span.createdTime - {{videoData.createdTime}} 
+    textarea(layout-fill, style="height: 20rem")
+      {{videoData}}
+  div#tree(ng-if="show==2")
+    p Tree 
+    textarea(layout-fill, style="height: 20rem") {{postTree}}

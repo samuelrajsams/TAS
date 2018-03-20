@@ -1,0 +1,101 @@
+div(layout="column", layout-padding, ng-init="init()")
+  div(layout="row", space-around)
+    div
+      md-input-container
+        label Title 
+        input(ng-model="title", type="string")
+    div
+      md-input-container
+        label Display Title 
+        input(ng-model="display_title", type="string")
+    div
+      md-input-container
+        label Price
+        input(ng-model="price", type="string")
+  div(layout="row")
+    div(flex)
+      textarea(layout-fill, placeholder="Description", ng-model="description", style="height: 5rem")
+  div(layout="row")
+    md-input-container
+      label Notes
+      input(ng-model="notes", type="string")
+  div(layout="row", layout-align="space-around")
+    md-input-container
+      label SEO Keywords
+      input(ng-model="seo_keywords", type="string")
+    md-input-container
+      label Tags
+      input(ng-model="tags", type="string")
+  div(layout="row", layout-align="space-around")
+    div
+      md-input-container
+        label Category
+        md-select(ng-model="selectedCategory", ng-change="changeSubcategories()")
+          md-option(ng-repeat="category in categories",  ng-value="category") {{category.name}}
+    div
+      md-input-container
+        label Sub Category
+        md-select(ng-model="selectedSubCategory")
+          md-option(ng-repeat="subCat in subCategories",  ng-value="subCat") {{subCat.name}}
+  div(ng-show="selectedCategory.value == 'experiences'")
+    div(layout="row", layout-align="space-around")
+      div(layout="column", layout-align="space-around")
+        label For Whom
+        div(ng-repeat="ageGroup in ageGroups")
+          md-checkbox(ng-model="ageGroup.selected", ng-click="toggleAgeSelection(ageGroup)") {{ageGroup.name}}
+    
+      div(layout="column", layout-align="space-around")
+        label Occasion
+        div(layout="column", layout-align="space-around")
+          div(ng-repeat="occasion in occasions")
+            md-checkbox(ng-model="occasion.selected", ng-click="toggleOccasionSelection(occasion)") {{occasion.name}}
+    md-checkbox(ng-model="isDefaultActivity") Default Activity
+  div(layout="column")
+    md-contact-chips(
+        ng-model="selectedAddons"
+        md-contacts="querySearch($query)"
+        md-contact-name="title"
+        md-require-match="true"
+        md-highlight-flags="i"
+        filter-selected="filterSelected"
+        placeholder="Add Ons")
+    //- md-list
+    //-   md-list
+    //-     md-subheader.md-no-sticky Addons
+    //-     md-list-item.md-2-line.contact-item(ng-repeat="addon in addons", ng-if="selectedAddons.indexOf(addon) < 0")
+    //-       div.md-list-item-text
+    //-         h3 {{addon.title}}
+    //-         p {{addon.description}}
+    //-     md-list-item.md-2-line.contact-item.selected(ng-repeat="(index, addon) in selectedAddons")
+    //-       div.md-list-item-text
+    //-         h3 {{addon.title}}
+    //-         p {{addon.description}}
+
+  div(layout="row", layout-align="space-around")
+    div
+      md-button.md-raised(ng-click="saveActivity()") save activity
+  div 
+    label Upload Images
+  div(layout="row", layout-align="space-around")
+    div(layout="row", layout-align="space-around")
+      div
+        input#inputFile(type="file", style="display: none;")
+        md-button.md-raised(onclick="document.getElementById('inputFile').click();") Select File
+      div
+        md-button.md-raised(ng-click="uploadImage()") Upload Image
+      div
+        md-button.md-raised(ng-click="changeDefault()") Change Default
+    div(layout="row", layout-padding)
+      md-progress-linear(md-mode="determinate", ng-value="data.uploadPercentage")
+  div 
+    label Images {{imageUrls.length}}
+  md-radio-group(ng-model="defaultImageIndex")
+    div(style="text-align: center;")
+      img(src="{{config.imageBaseUrl}}/{{mainUrl}}", width="500")
+    div(layout="row", layout-align="space-around", style="overflow:scroll")
+      div(ng-repeat="imageUrl in imageUrls", flex="25", layout-wrap)
+        img(ng-click="changeMainUrl($index)", src="{{config.imageBaseUrl}}/{{imageUrl}}", height="200px", width="200px")
+        div(layout="row", layout-align="center center", md-)
+          md-radio-button(value="{{$index}}") default
+          md-button(ng-click="removeImageUrl($index)")
+            md-icon delete

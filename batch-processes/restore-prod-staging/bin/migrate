@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
+/*
+ * decaffeinate suggestions:
+ * DS101: Remove unnecessary use of Array.from
+ * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
+ */
+const [interpreter,script,name] = Array.from(process.argv);
+const bodyParser = require("body-parser");
+const CSON = require("cson-parser");
+const fs = require("fs");
+const path = require("path");
+const {read} = require("fairmont");
+const Migrator = require("../src/migrator");
+const log4js = require("log4js");
+// log4js.configure({
+//   appenders: { task_indexer: { type: 'file', filename: 'task-indexer.log' } },
+//   categories: { default: { appenders: ['task_indexer'], level: 'info' } }
+// })
+const config = {};
+let configPath = path.resolve(__dirname,"..", "..", "..","commons", "env","production","config.cson");
+config.productionConfig = CSON.parse(read(configPath));
+
+configPath = path.resolve(__dirname,"..", "..", "..","commons", "env","staging","config.cson");
+config.stagingConfig = CSON.parse(read(configPath));
+
+config.dbConfig = CSON.parse(read(path.resolve(__dirname,"..", "..", "..", "commons", "env", "common", "database-mapping.cson")));
+Migrator.run(config);

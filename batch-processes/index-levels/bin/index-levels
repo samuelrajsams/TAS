@@ -1,0 +1,31 @@
+#!/usr/bin/env node
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
+/*
+ * decaffeinate suggestions:
+ * DS101: Remove unnecessary use of Array.from
+ * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
+ */
+const [interpreter,script,name] = Array.from(process.argv);
+const bodyParser = require("body-parser");
+const CSON = require("cson-parser");
+const fs = require("fs");
+const path = require("path");
+const {read} = require("fairmont");
+const Levels = require("../src/levels");
+const log4js = require("log4js");
+// log4js.configure({
+//   appenders: { task_indexer: { type: 'file', filename: 'task-indexer.log' } },
+//   categories: { default: { appenders: ['task_indexer'], level: 'info' } }
+// })
+
+const configPath = path.resolve(__dirname,"..", "..", "..","commons", "env",name,"config.cson");
+
+const configuration = CSON.parse(read(configPath));
+configuration.dbConfig = CSON.parse(read(path.resolve(__dirname,"..", "..", "..", "commons", "env", "common", "database-mapping.cson")));
+// move to configuration later
+levelsFile = path.resolve(__dirname, "..", "levels", "levels.json");
+levelsObj = JSON.parse(read(levelsFile));
+configuration.levels = levelsObj;
+// console.log(levelsObj);
+Levels.run(configuration);

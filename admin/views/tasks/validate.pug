@@ -1,0 +1,23 @@
+div(layout="column", layout-padding, ng-init="init()")
+  div(layout="column", ng-repeat='task in tasksList')
+    div(layout="row", layout-align="space-around")
+      div.v-width30(ng-click="expndDiv($index)")
+        md-tooltip(md-direction='left') Click to expand
+        p {{$index+1}} - {{task.user_id}}
+      div.v-width50
+        p.layout-margin {{task.task_category_type}}  
+        p {{task.task_data.url}}
+      div.v-width15
+        md-button.md-raised.md-primary(ng-click="validateTask(task)") Validate
+    div(ng-if="showDiv == $index")
+      div.layout-margin(layout="row", layout-align="space-around")
+        div.v-width50
+          p Account ID: {{task.account_id}}
+        div.v-width50
+          p Task Status: {{task.status}}
+      div.layout-margin(layout="row", layout-align="space-around")
+        div.v-width50
+          p Task Allocated On: {{task.create_time}}
+        div.v-width50  
+          p Task Completion Date: {{task.completion_date}}
+    md-divider

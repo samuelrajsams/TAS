@@ -1,0 +1,12 @@
+admin:
+  host: "0.0.0.0"
+  port: 9909
+web:
+	host: "127.0.0.1"
+	port: 9900
+elasticsearch:
+  host: "127.0.0.1"
+  port: 9200
+redis:
+  host: "127.0.0.1"
+  port: 6379
